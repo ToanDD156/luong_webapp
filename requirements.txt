@@ -1,6 +1,4 @@
-```
-pandas==2.2.2
-openpyxl==3.1.2
-sqlite3
-Flask==3.0.3
-```
+flask
+pandas
+openpyxl
+gunicorn
