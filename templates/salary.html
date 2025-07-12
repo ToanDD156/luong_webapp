@@ -1,52 +1,71 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phiếu Lương Tháng 07.2025</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1, h2 { text-align: center; color: #333; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
-    th { background-color: #f2f2f2; width: 50%; }
-    td.value { text-align: right; }
-    .highlight { text-align: center; font-size: 18px; color: green; margin-top: 10px; }
-    .logout { display: block; margin-top: 20px; text-align: center; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Phiếu Lương Tháng 07.2025</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #eee;
+        }
+        .highlight {
+            color: green;
+            font-weight: bold;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: purple;
+        }
+    </style>
 </head>
 <body>
-  <h1>Phiếu Lương Tháng 07.2025</h1>
-  <h2>{{ user["Họ và tên"] if "Họ và tên" in user else user["Họ tên"] }} (Mã NV: {{ user["Mã số"] }})</h2>
+    <h1>Phiếu Lương Tháng 07.2025</h1>
+    <h2>{{ user.get('Họ tên', '') }} (Mã NV: {{ user.get('MNV', '') }})</h2>
 
-  {% if "Thực lĩnh tiền mặt" in user %}
-    <p class="highlight">
-      💰 <strong>Thực lĩnh tiền mặt:</strong>
-      {{ "{:,.0f}".format(user["Thực lĩnh tiền mặt"]) }} VNĐ
-    </p>
-  {% endif %}
+    {% if user.get('Thực lĩnh tiền mặt') %}
+        <p class="highlight">💰 Thực lĩnh tiền mặt: {{ "{:,.0f}".format(float(user['Thực lĩnh tiền mặt'])) }} VNĐ</p>
+    {% endif %}
 
-  <table>
-    <tr>
-      <th>Thông tin</th>
-      <th>Giá trị</th>
-    </tr>
-    {% for key, value in user.items() %}
-      {% if key not in ["Mã số", "Mật khẩu", "STT", "Ký nhận"] and value and not key.startswith("Unnamed") %}
+    <table>
         <tr>
-          <td>{{ key }}</td>
-          <td class="value">
-            {% if value is number %}
-              {{ "{:,.0f}".format(value) }}
-            {% else %}
-              {{ value }}
-            {% endif %}
-          </td>
+            <th>Thông tin</th>
+            <th>Giá trị</th>
         </tr>
-      {% endif %}
-    {% endfor %}
-  </table>
+        {% for key, value in user.items() %}
+            {% if key not in ['Họ tên', 'MNV', 'Thực lĩnh tiền mặt'] %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>
+                    {% if value.replace(',', '').replace('.', '').isdigit() %}
+                        {{ "{:,.0f}".format(float(value)) }}
+                    {% else %}
+                        {{ value }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
 
-  <a href="/" class="logout">← Đăng xuất</a>
+    <p><a href="/">← Đăng xuất</a></p>
 </body>
 </html>
